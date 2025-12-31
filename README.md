@@ -1,6 +1,7 @@
 # Vietnamese Sentiment Analysis with PhoBERT
 
 Basically a fine-tuned [PhoBERT](https://github.com/VinAIResearch/PhoBERT) for simple 3-class sentiment classification (Negative / Neutral / Positive) on Vietnamese product reviews.
+Model via HuggingFace: (https://huggingface.co/sanvo/vietnamese-sentiment-phobert)
 
 ## Results
 
