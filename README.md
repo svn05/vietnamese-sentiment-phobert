@@ -22,7 +22,7 @@ Classifies Vietnamese text into three sentiment categories:
 
 ### Install
 ```bash
-git clone https://github.com/svn05/vietnamese-sentiment-phobert.git
+git clone https://github.com/sanvo/vietnamese-sentiment-phobert.git
 cd vietnamese-sentiment-phobert
 pip install -r requirements.txt
 ```
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ```python
 from transformers import pipeline
 
-classifier = pipeline("text-classification", model="svn05/vietnamese-sentiment-phobert")
+classifier = pipeline("text-classification", model="sanvo/vietnamese-sentiment-phobert")
 result = classifier("Sản phẩm rất tốt, tôi rất hài lòng")
 print(result)  # [{'label': 'positive', 'score': 0.96}]
 ```
@@ -99,4 +99,4 @@ vietnamese-sentiment-phobert/
 
 ## HuggingFace Hub
 
-Model available at: [svn05/vietnamese-sentiment-phobert](https://huggingface.co/svn05/vietnamese-sentiment-phobert)
+Model available at: [sanvo/vietnamese-sentiment-phobert](https://huggingface.co/sanvo/vietnamese-sentiment-phobert)

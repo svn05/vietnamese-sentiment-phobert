@@ -4,7 +4,7 @@ Uploads the model, tokenizer, and model card to HuggingFace Hub
 for public API inference.
 
 Usage:
-    python push_to_hub.py --repo-id svn05/vietnamese-sentiment-phobert
+    python push_to_hub.py --repo-id sanvo/vietnamese-sentiment-phobert
 """
 
 import argparse
@@ -68,7 +68,7 @@ This model classifies Vietnamese text into three sentiment categories:
 ```python
 from transformers import pipeline
 
-classifier = pipeline("text-classification", model="svn05/vietnamese-sentiment-phobert")
+classifier = pipeline("text-classification", model="sanvo/vietnamese-sentiment-phobert")
 result = classifier("Sản phẩm rất tốt, tôi rất hài lòng")
 print(result)
 ```
@@ -84,7 +84,7 @@ print(result)
 """
 
 
-def push_to_hub(model_dir="model", repo_id="svn05/vietnamese-sentiment-phobert"):
+def push_to_hub(model_dir="model", repo_id="sanvo/vietnamese-sentiment-phobert"):
     """Push model and tokenizer to HuggingFace Hub.
 
     Args:
@@ -115,7 +115,7 @@ def push_to_hub(model_dir="model", repo_id="svn05/vietnamese-sentiment-phobert")
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Push model to HuggingFace Hub")
     parser.add_argument("--model-dir", type=str, default="model")
-    parser.add_argument("--repo-id", type=str, default="svn05/vietnamese-sentiment-phobert")
+    parser.add_argument("--repo-id", type=str, default="sanvo/vietnamese-sentiment-phobert")
     args = parser.parse_args()
 
     push_to_hub(args.model_dir, args.repo_id)
