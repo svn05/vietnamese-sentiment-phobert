@@ -1,10 +1,10 @@
-"""Prepare Vietnamese product review data for sentiment classification.
+"""Prepare Vietnamese sentiment data for 3-class classification.
 
-Downloads and preprocesses Vietnamese review datasets for 3-class
-sentiment classification (positive, negative, neutral).
+Downloads and preprocesses Vietnamese datasets for sentiment classification
+(positive, negative, neutral).
 
 Supports:
-- UIT-VSFC (Vietnamese Students' Feedback Corpus)
+- UIT-VSFC (Vietnamese Students' Feedback Corpus) — 16,175 real samples
 - Synthetic Vietnamese product reviews for quick testing
 """
 
@@ -20,6 +20,37 @@ DATA_DIR = os.path.dirname(__file__)
 # Sentiment labels
 LABELS = {0: "negative", 1: "neutral", 2: "positive"}
 LABEL2ID = {"negative": 0, "neutral": 1, "positive": 2}
+
+
+def download_uit_vsfc(output_dir=DATA_DIR):
+    """Download UIT-VSFC dataset from HuggingFace and save as CSV.
+
+    The Vietnamese Students' Feedback Corpus contains 16,175 sentences
+    with 3-class sentiment labels, already split into train/val/test.
+
+    Args:
+        output_dir: Where to save CSVs.
+
+    Returns:
+        Tuple of (train_df, val_df, test_df).
+    """
+    from datasets import load_dataset
+
+    print("Downloading UIT-VSFC dataset from HuggingFace...")
+    dataset = load_dataset("uitnlp/vietnamese_students_feedback", trust_remote_code=True)
+
+    splits = {}
+    for split_name, file_name in [("train", "train.csv"), ("validation", "val.csv"), ("test", "test.csv")]:
+        df = pd.DataFrame({
+            "text": dataset[split_name]["sentence"],
+            "label": dataset[split_name]["sentiment"],
+        })
+        df.to_csv(os.path.join(output_dir, file_name), index=False)
+        splits[split_name] = df
+        print(f"  {split_name}: {len(df)} samples")
+
+    print(f"Label distribution (train): {splits['train']['label'].value_counts().sort_index().to_dict()}")
+    return splits["train"], splits["validation"], splits["test"]
 
 
 def generate_synthetic_reviews(n_samples=10000, seed=42):
@@ -175,9 +206,13 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Prepare Vietnamese sentiment data")
-    parser.add_argument("--n-samples", type=int, default=10000)
-    parser.add_argument("--source", choices=["synthetic"], default="synthetic")
+    parser.add_argument("--source", choices=["uit-vsfc", "synthetic"], default="uit-vsfc",
+                        help="Dataset source: uit-vsfc (real, 16k samples) or synthetic (template-based)")
+    parser.add_argument("--n-samples", type=int, default=10000, help="Number of samples (synthetic only)")
     args = parser.parse_args()
 
-    df = generate_synthetic_reviews(n_samples=args.n_samples)
-    save_splits(df)
+    if args.source == "uit-vsfc":
+        download_uit_vsfc()
+    else:
+        df = generate_synthetic_reviews(n_samples=args.n_samples)
+        save_splits(df)

@@ -140,12 +140,11 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print(f"Device: {device}")
 
-    # Check if data exists, generate if not
+    # Check if data exists, download if not
     if not os.path.exists(os.path.join(args.data_dir, "train.csv")):
-        print("Data not found. Generating synthetic reviews...")
-        from data.prepare_data import generate_synthetic_reviews, save_splits
-        df = generate_synthetic_reviews()
-        save_splits(df, args.data_dir)
+        print("Data not found. Downloading UIT-VSFC dataset...")
+        from data.prepare_data import download_uit_vsfc
+        download_uit_vsfc(args.data_dir)
 
     # Load data
     train_df, val_df, test_df = load_data(args.data_dir)

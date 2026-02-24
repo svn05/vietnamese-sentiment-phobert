@@ -105,8 +105,12 @@ def push_to_hub(model_dir="model", repo_id="sanvo/vietnamese-sentiment-phobert")
 
     # Upload model card
     api = HfApi()
-    card = ModelCard(MODEL_CARD_TEMPLATE)
-    card.push_to_hub(repo_id)
+    api.upload_file(
+        path_or_fileobj=MODEL_CARD_TEMPLATE.encode("utf-8"),
+        path_in_repo="README.md",
+        repo_id=repo_id,
+        commit_message="Add model card",
+    )
 
     print(f"\nModel uploaded to: https://huggingface.co/{repo_id}")
     print("Public API inference is now available!")
